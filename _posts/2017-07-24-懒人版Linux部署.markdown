@@ -1,0 +1,84 @@
+---
+layout: post
+title:  "懒人版Linux部署"
+date:   2017-07-24 15:33:39 +0000
+categories: jekyll update
+---
+
+ - *部署系统：Kali2.0*
+```
+#Deploy ZSH
+wget  https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh \
+&& chsh -s /bin/zsh
+
+#Deploy Oh-My-ZSH
+wget -q https://github.com/downloads/joelthelion/autojump/autojump_v21.1.2.tar.gz  \
+&& tar -xzf autojump_v21.1.2.tar.gz \
+&& cd autojump_v21.1.2 \
+&& ./install.sh \
+&& echo "[[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh" >> ~/.bashrc \
+&& sed -i '/plugins=(git)/'d ~/.zshrc \
+&& echo "plugins=(git autojump)" >> ~/.zshrc \
+
+#Deploy Vim
+echo "set nu">>/etc/vim/vimrc
+
+#Deploy ngrok
+https://github.com/inconshreveable/ngrok/archive/1.7.1.tar.gz
+wet get http://hls.ctopus.com/sunny/linux_amd64.zip \
+&&echo "#!/bin/bash">>/etc/init.d/ngrok.sh \
+&&/root/linux_amd64/sunny clientid 21c680fe89da9dc1 \
+&& ln -s /etc/init.d/ngrok.sh /etc/rc3.d/S1ngrok \
+&& ln -s /etc/init.d/ngrok.sh /etc/rc5.d/S1ngrok \
+&& systemctl set-default multi-user.target 
+
+#Deply SSH
+echo "PasswordAuthentication yes">>/etc/ssh/sshd_config \
+&&echo "PermitRootLogin yes">>/etc/ssh/sshd_config \
+&&service ssh restart \
+&&update-rc.d ssh enable
+
+#crontab
+
+#中文输入
+apt-get install fcitx-googlepinyin
+
+#备份&恢复系统
+tar -cvpzf /media/root/kali/backup.tgz --exclude=\proc --exclude=/lost+found --exclude=/tmp --exclude=/sys --exclude=/media --exclude=/home /
+tar -xvpzf backup.tgz -C /
+
+#中文显示
+apt-get install locales \ 
+&& locale-gen \
+&& echo "export LC_ALL="zh_CN.UTF-8"" >> ~/.zshrc \
+&&&& echo "export LANG="zh_CN.UTF-8"" >> ~/.zshrc
+```
+
+#截图工具 shutter
+
+Win10访问在Docker环境下安装的jekyll blog出错:
+> 127.0.0.1 未发送任何数据
+
+解决方法： 加上-H参数指定倾听地址
+> jekyll serve -H 0.0.0.0
+
+#Docker
+- 命令行映射端口号
+
+> docker run -d --name kali -p 4000:4000 -it kali /bin/bash
+
+- 使用 [Kitematic] 图形界面可以方便地动态映射端口号
+
+![Docker Port][1]
+
+[Kitematic]: https://download.docker.com/kitematic/Kitematic-Windows.zip
+
+
+#Vim下全局复制粘贴
+> echo "map <C-c> "+y                      "">>  /etc/vim/vimrc
+ echo "nmap <C-v> "+gp                    "">>  /etc/vim/vimrc
+
+
+  [1]: https://raw.githubusercontent.com/jie2515/Photo/master/docker_port.png
+
+

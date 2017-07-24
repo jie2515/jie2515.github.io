@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="/jie2515.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="/jie2515.github.io/" rel="alternate" type="text/html" /><updated>2017-07-24T08:49:56+00:00</updated><id>/jie2515.github.io/</id><title type="html">静听风声</title><subtitle>一个网络程师的无病呻吟</subtitle><entry><title type="html">懒人版Linux部署</title><link href="/jie2515.github.io/2017/07/24/Linux.html" rel="alternate" type="text/html" title="懒人版Linux部署" /><published>2017-07-24T00:00:00+00:00</published><updated>2017-07-24T00:00:00+00:00</updated><id>/jie2515.github.io/2017/07/24/Linux</id><content type="html" xml:base="/jie2515.github.io/2017/07/24/Linux.html">&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;部署系统：Kali2.0&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Deploy ZSH&lt;/span&gt;
+wget  https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; chsh -s /bin/zsh
+
+&lt;span class=&quot;c&quot;&gt;# Deploy Oh-My-ZSH&lt;/span&gt;
+wget -q https://github.com/downloads/joelthelion/autojump/autojump_v21.1.2.tar.gz  &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; tar -xzf autojump_v21.1.2.tar.gz &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;autojump_v21.1.2 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./install.sh &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[[ -s /etc/profile.d/autojump.sh ]] &amp;amp;&amp;amp; . /etc/profile.d/autojump.sh&quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bashrc &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sed -i &lt;span class=&quot;s1&quot;&gt;'/plugins=(git)/'&lt;/span&gt;d ~/.zshrc &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;plugins=(git autojump)&quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Deploy Vim&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;set nu&quot;&lt;/span&gt;&amp;gt;&amp;gt;/etc/vim/vimrc
+
+&lt;span class=&quot;c&quot;&gt;# Deploy ngrok&lt;/span&gt;
+https://github.com/inconshreveable/ngrok/archive/1.7.1.tar.gz
+wet get http://hls.ctopus.com/sunny/linux_amd64.zip &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;#!/bin/bash&quot;&lt;/span&gt;&amp;gt;&amp;gt;/etc/init.d/ngrok.sh &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;/root/linux_amd64/sunny clientid 21c680fe89da9dc1 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ln -s /etc/init.d/ngrok.sh /etc/rc3.d/S1ngrok &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ln -s /etc/init.d/ngrok.sh /etc/rc5.d/S1ngrok &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; systemctl &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-default multi-user.target 
+
+&lt;span class=&quot;c&quot;&gt;# Deply SSH&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;PasswordAuthentication yes&quot;&lt;/span&gt;&amp;gt;&amp;gt;/etc/ssh/sshd_config &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;PermitRootLogin yes&quot;&lt;/span&gt;&amp;gt;&amp;gt;/etc/ssh/sshd_config &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;service ssh restart &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;update-rc.d ssh &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# crontab&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 中文输入&lt;/span&gt;
+apt-get install fcitx-googlepinyin
+
+&lt;span class=&quot;c&quot;&gt;# 备份&amp;amp;恢复系统&lt;/span&gt;
+tar -cvpzf /media/root/kali/backup.tgz --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\p&lt;/span&gt;roc --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/lost+found --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/tmp --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/sys --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/media --exclude&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home /
+tar -xvpzf backup.tgz -C /
+
+&lt;span class=&quot;c&quot;&gt;# 中文显示&lt;/span&gt;
+apt-get install locales &lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; locale-gen &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;export LC_ALL=&quot;&lt;/span&gt;zh_CN.UTF-8&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;export LANG=&quot;&lt;/span&gt;zh_CN.UTF-8&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;截图工具-shutter&quot;&gt;截图工具 shutter&lt;/h1&gt;
+
+&lt;p&gt;Win10访问在Docker环境下安装的jekyll blog出错:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;127.0.0.1 未发送任何数据&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;解决方法： 加上-H参数指定倾听地址&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;jekyll serve -H 0.0.0.0&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;docker&quot;&gt;Docker&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;命令行映射端口号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;docker run -d –name kali -p 4000:4000 -it kali /bin/bash&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用 &lt;a href=&quot;https://download.docker.com/kitematic/Kitematic-Windows.zip&quot;&gt;Kitematic&lt;/a&gt; 图形界面可以方便地动态映射端口号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/jie2515/Photo/master/docker_port.png&quot; alt=&quot;Docker Port&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;vim下全局复制粘贴&quot;&gt;Vim下全局复制粘贴&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;echo “map &lt;C-c&gt; &quot;+y                      &quot;&quot;&amp;gt;&amp;gt;  /etc/vim/vimrc
+echo &quot;nmap &lt;C-v&gt; &quot;+gp                    &quot;&quot;&amp;gt;&amp;gt;  /etc/vim/vimrc&lt;/C-v&gt;&lt;/C-c&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name></name></author><summary type="html">部署系统：Kali2.0</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="/jie2515.github.io/jekyll/update/2017/07/23/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2017-07-23T17:33:39+00:00</published><updated>2017-07-23T17:33:39+00:00</updated><id>/jie2515.github.io/jekyll/update/2017/07/23/welcome-to-jekyll</id><content type="html" xml:base="/jie2515.github.io/jekyll/update/2017/07/23/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
